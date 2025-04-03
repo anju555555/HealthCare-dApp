@@ -1,20 +1,24 @@
 module.exports = {
-  // See <http://truffleframework.com/docs/advanced/configuration>
-  // for more about customizing your Truffle configuration!
   networks: {
     development: {
       host: "127.0.0.1",
       port: 7545,
-      network_id: "*" // Match any network id
+      network_id: "*",
     },
-    develop: {
-      port: 7545
-    }
   },
+
   compilers: {
     solc: {
-      version: "0.8.16",    // Fetch exact version from solc-bin 
-    }
-  }
-
+      version: "0.8.16", // match your Solidity version
+      settings: {
+        optimizer: {
+          enabled: true,     // clearly enable optimizer
+          runs: 200,         // recommended optimization runs
+        },
+        viaIR: true,         // enable via IR compilation clearly
+      },
+    },
+  },
 };
+
+
