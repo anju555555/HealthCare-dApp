@@ -1,0 +1,6 @@
+node_modules
+build
+*.min.js
+truffle-contract.js
+web3.min.js
+bootstrap.min.js 

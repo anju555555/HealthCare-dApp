@@ -1,0 +1,19 @@
+{
+  "extends": "solhint:recommended",
+  "rules": {
+    "compiler-version": ["error", "^0.8.0"],
+    "func-visibility": ["warn", { "ignoreConstructors": true }],
+    "not-rely-on-time": "off",
+    "no-empty-blocks": "warn",
+    "quotes": ["error", "double"],
+    "const-name-snakecase": "warn",
+    "func-name-mixedcase": "warn",
+    "use-forbidden-name": "error",
+    "visibility-modifier-order": "warn",
+    "avoid-call-value": "error",
+    "avoid-low-level-calls": "warn",
+    "avoid-tx-origin": "error",
+    "check-send-result": "error",
+    "reentrancy": "error"
+  }
+} 
