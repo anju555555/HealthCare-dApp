@@ -22,6 +22,7 @@ contract PatientManagement {
     CRITICAL
   }
 
+  // Admin structure
   struct Admin {
     uint id;
     string name;
@@ -29,6 +30,7 @@ contract PatientManagement {
     bool active;
   }
 
+  // Patient structure
   struct Patient {
     uint id;
     uint age;
@@ -47,6 +49,7 @@ contract PatientManagement {
     uint timestamp;
   }
 
+  // Doctor structure
   struct Doctor {
     uint id;
     string name;
@@ -58,6 +61,7 @@ contract PatientManagement {
     address doctorAddress;
   }
 
+  // Appointment structure
   struct Appointment {
     address patient;
     uint timestamp;
@@ -66,6 +70,7 @@ contract PatientManagement {
     string prescription;
   }
 
+  // District statistics
   struct DistrictData {
     string districtName;
     uint childrenCount;
@@ -80,31 +85,47 @@ contract PatientManagement {
     uint medianAge;
   }
 
+  // Counters for each entity
   uint public adminCount;
   uint public patientCount;
   uint public doctorCount;
   uint public appointmentCount;
 
+  // Mappings for storing user data
   mapping(address => Admin) public admins;
   mapping(address => Patient) public patients;
   mapping(address => Doctor) public doctors;
   mapping(address => mapping(string => Appointment)) public doctorAppointments;
+  mapping(string => mapping(uint256 => bool)) public doctorSchedule;
 
+  // Address lists
   address[] public patientAddresses;
   address[] public doctorAddresses;
   address[] public adminAddresses;
 
+  // User registration and type
   mapping(address => bool) private registeredUsers;
-  mapping(address => uint) public userType; // 1 = admin, 2 = doctor, 3 = patient
+  mapping(address => uint) public userType;
 
+  // Available time slots
   string[] public timeSlots = [
-    '4:00 PM - 4:10 PM',
-    '4:10 PM - 4:20 PM',
-    '4:20 PM - 4:30 PM',
-    '4:30 PM - 4:40 PM',
-    '4:40 PM - 4:50 PM',
-    '4:50 PM - 5:00 PM'
+    '1:00 PM - 2:00 PM',
+    '2:00 PM - 3:00 PM',
+    '3:00 PM - 4:00 PM',
+    '4:00 PM - 5:00 PM',
+    '5:00 PM - 6:00 PM',
+    '6:00 PM - 7:00 PM'
   ];
+
+  // Check if provided slot exists
+  function isSlotValid(string memory timeSlot) public view returns (bool) {
+    for (uint i = 0; i < timeSlots.length; i++) {
+      if (keccak256(bytes(timeSlots[i])) == keccak256(bytes(timeSlot))) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // Emergency contacts for patients
   mapping(address => address[]) public emergencyContacts;
@@ -113,11 +134,12 @@ contract PatientManagement {
   event AdminRegistered(address indexed adminAddress, uint id, string name, uint timestamp);
   event DoctorRegistered(
     address indexed doctorAddress,
-    uint id,
+    uint256 id,
     string name,
     string specialization,
-    uint timestamp
+    uint256 timestamp
   );
+
   event PatientRegistered(address indexed patientAddress, uint id, string name, uint timestamp);
   event PatientUpdated(address indexed patientAddress, string updateField, uint timestamp);
   event AppointmentBooked(
@@ -127,6 +149,7 @@ contract PatientManagement {
     uint fee,
     uint timestamp
   );
+
   event AppointmentCompleted(
     address indexed patientAddress,
     address indexed doctorAddress,
@@ -134,28 +157,33 @@ contract PatientManagement {
     uint timestamp
   );
 
+  // Modifier: restrict to admin only
   modifier onlyAdmin() {
     require(userType[msg.sender] == 1, 'Only admins can perform this action');
     require(admins[msg.sender].active, 'Admin account is not active');
     _;
   }
 
+  // Modifier: restrict to verified doctors
   modifier onlyDoctor() {
     require(userType[msg.sender] == 2, 'Only doctors can perform this action');
     require(doctors[msg.sender].verified, 'Doctor account is not verified');
     _;
   }
 
+  // Modifier: restrict to patients
   modifier onlyPatient() {
     require(userType[msg.sender] == 3, 'Only patients can perform this action');
     _;
   }
 
+  // Modifier: only registered users can access
   modifier onlyRegisteredUser() {
     require(registeredUsers[msg.sender], 'You must be registered');
     _;
   }
 
+  // Constructor: registers contract deployer as the first admin
   constructor() {
     address hardcodedAdmin = 0x0D2f38cD0F5CB5E52e8701e0378Dfa958AA43cf5;
     adminCount++;
@@ -172,6 +200,7 @@ contract PatientManagement {
     emit AdminRegistered(hardcodedAdmin, adminCount, 'Contract Deployer', block.timestamp);
   }
 
+  // Function to register a new admin
   function registerAdmin(string memory name) public {
     require(!registeredUsers[msg.sender], 'You are already registered');
     require(bytes(name).length > 0, 'Name cannot be empty');
@@ -183,6 +212,7 @@ contract PatientManagement {
       timestamp: block.timestamp,
       active: true
     });
+
     registeredUsers[msg.sender] = true;
     userType[msg.sender] = 1;
     adminAddresses.push(msg.sender);
@@ -190,6 +220,7 @@ contract PatientManagement {
     emit AdminRegistered(msg.sender, adminCount, name, block.timestamp);
   }
 
+  // Function to register a new patient
   function registerPatient(
     uint age,
     string memory name,
@@ -197,7 +228,8 @@ contract PatientManagement {
     string memory district,
     string memory symptomsDetails,
     string memory bloodGroup
-  ) public {
+  ) public // Ensure user is not already registered
+  {
     require(!registeredUsers[msg.sender], 'You are already registered');
     require(bytes(name).length > 0, 'Name cannot be empty');
     require(age > 0, 'Age must be greater than 0');
@@ -210,6 +242,7 @@ contract PatientManagement {
 
     string[] memory emptyStringArray = new string[](0);
 
+    // Create and store patient record
     patients[msg.sender] = Patient({
       id: patientCount,
       name: name,
@@ -228,13 +261,16 @@ contract PatientManagement {
       timestamp: block.timestamp
     });
 
+    // Mark user as registered
     registeredUsers[msg.sender] = true;
     userType[msg.sender] = 3;
     patientAddresses.push(msg.sender);
 
+    // Emit event for logging
     emit PatientRegistered(msg.sender, patientCount, name, block.timestamp);
   }
 
+  // Function to register a new doctor
   function registerDoctor(
     string memory name,
     string memory specialization,
@@ -265,6 +301,7 @@ contract PatientManagement {
     emit DoctorRegistered(msg.sender, doctorCount, name, specialization, block.timestamp);
   }
 
+  // Function to update patient data
   function updatePatientData(
     address patientAddress,
     uint vaccineStatusCode,
@@ -288,6 +325,7 @@ contract PatientManagement {
     }
   }
 
+  // Update severity level of a patient
   function updatePatientSeverity(address patientAddress, uint severityCode) public onlyAdmin {
     require(userType[patientAddress] == 3, 'Address is not a registered patient');
     require(severityCode <= uint(PatientSeverity.CRITICAL), 'Invalid severity status');
@@ -299,6 +337,7 @@ contract PatientManagement {
     emit PatientUpdated(patientAddress, 'severity', block.timestamp);
   }
 
+  // Add allergy record to a patient
   function addPatientAllergy(address patientAddress, string memory allergy) public onlyAdmin {
     require(userType[patientAddress] == 3, 'Address is not a registered patient');
     require(bytes(allergy).length > 0, 'Allergy cannot be empty');
@@ -309,6 +348,7 @@ contract PatientManagement {
     emit PatientUpdated(patientAddress, 'allergy', block.timestamp);
   }
 
+  // Add medication record to a patient
   function addPatientMedication(address patientAddress, string memory medication) public onlyAdmin {
     require(userType[patientAddress] == 3, 'Address is not a registered patient');
     require(bytes(medication).length > 0, 'Medication cannot be empty');
@@ -319,6 +359,7 @@ contract PatientManagement {
     emit PatientUpdated(patientAddress, 'medication', block.timestamp);
   }
 
+  // Function to verify a doctor
   function verifyDoctor(address doctorAddress) public onlyAdmin {
     require(userType[doctorAddress] == 2, 'Address is not a registered doctor');
 
@@ -333,12 +374,14 @@ contract PatientManagement {
     );
   }
 
+  // Function to set appointment fee for a doctor
   function setDoctorAppointmentFee(uint fee) public onlyDoctor {
     require(fee > 0, 'Fee must be greater than 0');
 
     doctors[msg.sender].appointmentFee = fee;
   }
 
+  // Function to book an appointment with a doctor
   function bookAppointment(
     address doctorAddress,
     address adminAddress,
@@ -371,12 +414,12 @@ contract PatientManagement {
 
     appointmentCount++;
 
-    // Transfer fee to admin
     payable(adminAddress).transfer(msg.value);
 
     emit AppointmentBooked(msg.sender, doctorAddress, timeSlot, msg.value, block.timestamp);
   }
 
+  // Function to complete an appointment
   function completeAppointment(
     string memory timeSlot,
     string memory diagnosis,
@@ -391,12 +434,12 @@ contract PatientManagement {
     appointment.diagnosis = diagnosis;
     appointment.prescription = prescription;
 
-    // Update patient's last checkup time
     patients[appointment.patient].lastCheckup = block.timestamp;
 
     emit AppointmentCompleted(appointment.patient, msg.sender, timeSlot, block.timestamp);
   }
 
+  // Add allergy record to a patient
   function viewAppointmentSchedule(
     address doctorAddress
   ) public view onlyRegisteredUser returns (string[] memory, address[] memory, bool[] memory) {
@@ -416,6 +459,7 @@ contract PatientManagement {
     return (availableSlots, bookedPatients, completionStatus);
   }
 
+  // Function to get appointment details
   function getAppointmentDetails(
     address doctorAddress,
     string memory timeSlot
@@ -426,7 +470,6 @@ contract PatientManagement {
 
     require(appointment.patient != address(0), 'No appointment in this time slot');
 
-    // Only doctor, admin, or the patient can view complete details
     if (
       msg.sender != doctorAddress && userType[msg.sender] != 1 && msg.sender != appointment.patient
     ) {
@@ -442,6 +485,7 @@ contract PatientManagement {
     );
   }
 
+  // Function to get patient details
   function getPatientAllergies(
     address patientAddress
   ) public view onlyRegisteredUser returns (string[] memory) {
@@ -456,12 +500,12 @@ contract PatientManagement {
     return patients[patientAddress].allergies;
   }
 
+  // Function to get patient medications
   function getPatientMedications(
     address patientAddress
   ) public view onlyRegisteredUser returns (string[] memory) {
     require(userType[patientAddress] == 3, 'Not a valid patient');
 
-    // Only admin, doctor, or patient themselves can view this
     require(
       userType[msg.sender] == 1 || userType[msg.sender] == 2 || msg.sender == patientAddress,
       'Not authorized to view this information'
@@ -470,6 +514,7 @@ contract PatientManagement {
     return patients[patientAddress].medications;
   }
 
+  // Function to get patient details
   function getCovidTrendData(
     address patientAddress
   ) public view onlyRegisteredUser returns (uint, string memory, uint, bool, PatientSeverity) {
@@ -486,26 +531,31 @@ contract PatientManagement {
     );
   }
 
+  // Add allergy record to a patient
   function addEmergencyContact(address contact) public onlyPatient {
     require(registeredUsers[contact], 'Emergency contact must be a registered user');
 
     emergencyContacts[msg.sender].push(contact);
   }
 
+  // Function to get emergency contacts of a patient
   function getPatientCount() public view returns (uint) {
     return patientCount;
   }
 
+  // Return total number of registered doctors
   function getDoctorCount() public view returns (uint) {
     return doctorCount;
   }
 
+  // Get patient address by index (only for registered users)
   function getPatientByIndex(uint index) public view onlyRegisteredUser returns (address) {
     require(index < patientAddresses.length, 'Invalid index');
 
     return patientAddresses[index];
   }
 
+  // Get doctor address by index (only for registered users)
   function getDoctorByIndex(uint index) public view onlyRegisteredUser returns (address) {
     require(index < doctorAddresses.length, 'Invalid index');
 

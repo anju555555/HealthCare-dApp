@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-/**
- * @title HealthcareToken
- * @dev ERC20 Token implementation for healthcare rewards and payments
- */
+// @dev ERC20 Token implementation for healthcare rewards and payments
 contract HealthcareToken {
   string public name = 'Healthcare Token';
   string public symbol = 'HCT';
@@ -18,7 +15,7 @@ contract HealthcareToken {
   mapping(address => mapping(address => uint256)) public allowance;
 
   // Fee system for certain operations
-  uint256 public transferFeeRate = 0; // No fee by default
+  uint256 public transferFeeRate = 0;
   bool public feesEnabled = false;
 
   // List of addresses exempt from fees
@@ -44,72 +41,53 @@ contract HealthcareToken {
     _;
   }
 
-  /**
-   * @dev Constructor that gives the deployer all initial tokens
-   */
+  // Constructor that gives the deployer all initial tokens
   constructor(uint256 initialSupply) {
     owner = msg.sender;
     totalSupply = initialSupply * 10 ** uint256(decimals);
     balanceOf[msg.sender] = totalSupply;
-
-    // Owner is exempt from fees
     isExemptFromFee[msg.sender] = true;
 
     emit Transfer(address(0), msg.sender, totalSupply);
   }
 
-  /**
-   * @dev Set the Patient Management contract address
-   */
+  // Set the Patient Management contract address
   function setPatientManagementContract(address _contract) public onlyOwner {
     require(_contract != address(0), 'Cannot set zero address');
     patientManagementContract = _contract;
-
-    // Make the contract exempt from fees
     isExemptFromFee[_contract] = true;
 
     emit PatientManagementContractChanged(_contract);
   }
 
-  /**
-   * @dev Enable or disable fees
-   */
+  // Enable or disable fees
   function setFeesEnabled(bool _enabled) public onlyOwner {
     feesEnabled = _enabled;
     emit FeesEnabledChanged(_enabled);
   }
 
-  /**
-   * @dev Set the transfer fee rate (in basis points, 1/100 of a percent)
-   * 100 = 1%, 10 = 0.1%, 1 = 0.01%, max 500 (5%)
-   */
+  // Set the transfer fee rate (in basis points, 1/100 of a percent)
   function setTransferFeeRate(uint256 _feeRate) public onlyOwner {
     require(_feeRate <= 500, 'Fee rate cannot exceed 5%');
     transferFeeRate = _feeRate;
     emit FeeRateChanged(_feeRate);
   }
 
-  /**
-   * @dev Set an address as exempt from fees
-   */
+  // Set an address as exempt from fees
   function setFeeExemption(address _address, bool _isExempt) public onlyOwner {
     isExemptFromFee[_address] = _isExempt;
   }
 
-  /**
-   * @dev Transfer tokens from sender to recipient
-   */
+  // Transfer tokens from sender to recipient
   function transfer(address recipient, uint256 amount) public returns (bool) {
     uint256 feeAmount = 0;
 
-    // Calculate fee if applicable
     if (feesEnabled && !isExemptFromFee[msg.sender] && !isExemptFromFee[recipient]) {
       feeAmount = (amount * transferFeeRate) / 10000;
     }
 
     _transfer(msg.sender, recipient, amount - feeAmount);
 
-    // Transfer fee to owner if any
     if (feeAmount > 0) {
       _transfer(msg.sender, owner, feeAmount);
     }
@@ -117,18 +95,14 @@ contract HealthcareToken {
     return true;
   }
 
-  /**
-   * @dev Approve the spender to spend the specified amount of tokens on behalf of the sender
-   */
+  // Approve the spender to spend the specified amount of tokens on behalf of the sender
   function approve(address spender, uint256 amount) public returns (bool) {
     allowance[msg.sender][spender] = amount;
     emit Approval(msg.sender, spender, amount);
     return true;
   }
 
-  /**
-   * @dev Transfer tokens from one address to another
-   */
+  // Transfer tokens from one address to another
   function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
     require(allowance[sender][msg.sender] >= amount, 'Transfer amount exceeds allowance');
 
@@ -142,7 +116,6 @@ contract HealthcareToken {
     allowance[sender][msg.sender] -= amount;
     _transfer(sender, recipient, amount - feeAmount);
 
-    // Transfer fee to owner if any
     if (feeAmount > 0) {
       _transfer(sender, owner, feeAmount);
     }
@@ -150,9 +123,7 @@ contract HealthcareToken {
     return true;
   }
 
-  /**
-   * @dev Internal function to transfer tokens
-   */
+  // Internal function to transfer tokens
   function _transfer(address sender, address recipient, uint256 amount) internal {
     require(sender != address(0), 'Transfer from the zero address');
     require(recipient != address(0), 'Transfer to the zero address');
@@ -164,9 +135,7 @@ contract HealthcareToken {
     emit Transfer(sender, recipient, amount);
   }
 
-  /**
-   * @dev Mint tokens to a specified address (only callable by the owner)
-   */
+  // Mint tokens to a specified address (only callable by the owner)
   function mint(address recipient, uint256 amount) public onlyOwner {
     require(recipient != address(0), 'Mint to the zero address');
 
@@ -177,9 +146,7 @@ contract HealthcareToken {
     emit Transfer(address(0), recipient, mintAmount);
   }
 
-  /**
-   * @dev Burn tokens from the caller's account
-   */
+  // Burn tokens from the caller's account
   function burn(uint256 amount) public {
     uint256 burnAmount = amount * 10 ** uint256(decimals);
     require(balanceOf[msg.sender] >= burnAmount, 'Burn amount exceeds balance');
@@ -190,9 +157,7 @@ contract HealthcareToken {
     emit Transfer(msg.sender, address(0), burnAmount);
   }
 
-  /**
-   * @dev Reward tokens for specific healthcare actions (can only be called by the Patient Management contract)
-   */
+  // Reward tokens for specific healthcare actions (can only be called by the Patient Management contract)
   function rewardForHealthcareAction(
     address recipient,
     uint256 amount
@@ -203,19 +168,15 @@ contract HealthcareToken {
 
     // Check if there are enough tokens in the contract balance
     if (balanceOf[patientManagementContract] >= rewardAmount) {
-      // Transfer from contract balance
       _transfer(patientManagementContract, recipient, rewardAmount);
     } else {
-      // Mint new tokens
       totalSupply += rewardAmount;
       balanceOf[recipient] += rewardAmount;
       emit Transfer(address(0), recipient, rewardAmount);
     }
   }
 
-  /**
-   * @dev Withdraw ETH accidentally sent to the contract (only callable by the owner)
-   */
+  // Withdraw ETH accidentally sent to the contract (only callable by the owner)
   function withdrawETH() public onlyOwner {
     uint256 balance = address(this).balance;
     require(balance > 0, 'No ETH to withdraw');
@@ -227,19 +188,13 @@ contract HealthcareToken {
    * @dev Withdraw any ERC20 tokens accidentally sent to the contract (only callable by the owner)
    */
   function withdrawERC20(address tokenAddress, uint256 amount) public onlyOwner {
-    // Create a generic ERC20 interface to interact with the token
     IERC20 token = IERC20(tokenAddress);
     token.transfer(owner, amount);
   }
-
-  // Enable the contract to receive ETH
   receive() external payable {}
 }
 
-/**
- * @title IERC20
- * @dev Interface for interacting with other ERC20 tokens
- */
+// Interface for interacting with other ERC20 tokens
 interface IERC20 {
   function transfer(address recipient, uint256 amount) external returns (bool);
   function balanceOf(address account) external view returns (uint256);
@@ -292,18 +247,14 @@ contract HealthcareRewards {
     owner = msg.sender;
   }
 
-  /**
-   * @dev Set the Patient Management contract address
-   */
+  // Set the Patient Management contract address
   function setPatientManagementContract(address _contract) public onlyOwner {
     require(_contract != address(0), 'Cannot set zero address');
     patientManagementContract = _contract;
     emit PatientManagementContractChanged(_contract);
   }
 
-  /**
-   * @dev Set the reward amounts
-   */
+  // Set the reward amounts
   function setRewardAmounts(
     uint256 _registration,
     uint256 _appointment,
@@ -321,9 +272,7 @@ contract HealthcareRewards {
     emit RewardAmountChanged('vaccination', _vaccination);
   }
 
-  /**
-   * @dev Issue a registration reward
-   */
+  // Issue a registration reward
   function issueRegistrationReward(address patient) public onlyPatientManagement {
     require(
       block.timestamp - lastRewardTime[patient] >= REGISTRATION_COOLDOWN,
@@ -337,9 +286,7 @@ contract HealthcareRewards {
     emit RewardIssued(patient, registrationReward, 'registration');
   }
 
-  /**
-   * @dev Issue an appointment completion reward
-   */
+  // Issue an appointment completion reward
   function issueAppointmentReward(address patient) public onlyPatientManagement {
     require(
       block.timestamp - lastRewardTime[patient] >= APPOINTMENT_COOLDOWN,
@@ -353,9 +300,7 @@ contract HealthcareRewards {
     emit RewardIssued(patient, appointmentCompletionReward, 'appointment');
   }
 
-  /**
-   * @dev Issue a regular checkup reward
-   */
+  // Issue a regular checkup reward
   function issueCheckupReward(address patient) public onlyPatientManagement {
     require(
       block.timestamp - lastRewardTime[patient] >= CHECKUP_COOLDOWN,
@@ -369,9 +314,7 @@ contract HealthcareRewards {
     emit RewardIssued(patient, regularCheckupReward, 'checkup');
   }
 
-  /**
-   * @dev Issue a vaccination reward
-   */
+  // Issue a vaccination reward
   function issueVaccinationReward(address patient) public onlyPatientManagement {
     totalRewardsEarned[patient] += vaccinationReward;
 
@@ -379,9 +322,7 @@ contract HealthcareRewards {
     emit RewardIssued(patient, vaccinationReward, 'vaccination');
   }
 
-  /**
-   * @dev View total rewards earned by a patient
-   */
+  // Get total rewards earned by a patient
   function getPatientRewards(address patient) public view returns (uint256) {
     return totalRewardsEarned[patient];
   }
