@@ -569,7 +569,7 @@ App = {
        // Generate HTML for trend table
        let tableHTML = `
                 <table class="table table-bordered">
-    ]            <thead>
+                 <thead>
                    <tr>
                      <th>District</th>
                      <th>Total Patients</th>
