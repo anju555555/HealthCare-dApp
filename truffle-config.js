@@ -9,13 +9,13 @@ module.exports = {
 
   compilers: {
     solc: {
-      version: "0.8.16", // match your Solidity version
+      version: "0.8.16", 
       settings: {
         optimizer: {
-          enabled: true,     // clearly enable optimizer
-          runs: 200,         // recommended optimization runs
+          enabled: true,     
+          runs: 200,         
         },
-        viaIR: true,         // enable via IR compilation clearly
+        viaIR: true,        
       },
     },
   },
