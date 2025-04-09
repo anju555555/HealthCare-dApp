@@ -70,32 +70,33 @@ Following commands are tested on window.
 ## Installation
 1. Clone the repository.
 2. Start Ganache and create a new workspace.
-3. In a **new terminal**, navigate to the backend folder and start the server:
+3. Start MongoDb connection.
+4. In a **new terminal**, navigate to the backend folder and start the server:
     ```bash
     cd backend
     node server.js
     ```
-4. **new terminal**, Compile and deploy the smart contracts using Truffle:
+5. **new terminal**, Compile and deploy the smart contracts using Truffle:
     ```bash
     truffle compile
     truffle migrate
     ```
-5. Install the required packages:
+6. Install the required packages:
     ```bash
     npm install
     ```
-6. Start the React app:
+7. Start the React app:
     ```bash
     npm run dev
     ```
-7. Open the app in your browser at `http://localhost:3000/`.
+8. Open the app in your browser at `http://localhost:3000/`.
 ---
 
 ## Screenshots
 
 ### Registration Page (Admin & Doctor & patients)
 The screenshots showcase the Home and Registration pages of the Healthcare DApp. The home page confirms successful MetaMask wallet connection and displays the user's token balance. Users can register as Admin, Doctor, or Patient by selecting their role and filling out the respective form. Each registration triggers a MetaMask transaction for secure blockchain-based storage. Admins enter their name, doctors provide additional details like specialization and license number, and patients submit information such as age, symptoms, and blood group.
-![Registration Page].(
+![Registration Page]
 
 ### Registration Page (Patient)
 Here patients can register by providing their details. Every time you register a new patient, a new transaction is created in the blockchain.
