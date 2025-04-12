@@ -99,7 +99,11 @@ The homepage of the Healthcare DApp showcases a blockchain-powered Patient Manag
 
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p1%20home.png)
 
+
+
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p3%20Doc%20regi.png)
+
+
 
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p4%20patient%20regi.png)
 
@@ -108,40 +112,73 @@ The homepage of the Healthcare DApp showcases a blockchain-powered Patient Manag
 ### Update Patient Data (Admin only)
 This screenshot shows the "Update Patient Data" section for admins in the Healthcare DApp. The admin selects a patient, updates their vaccine and admission status, and submits the changes. MetaMask then prompts for transaction confirmation, ensuring the update is securely recorded on the blockchain.
 
+
+
+
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p6%20patient%20form%20(admin)%20.png)
 
 ### View appoinment Schedule (For Current Doctor)
 This screenshot displays the "View Appointment Schedules" section of the Healthcare DApp. It shows the connected user's wallet address, token balance, and available appointment slots. For Dr. Jiya Patel, multiple time slots are already marked as "Booked," helping users view current availability in real-time.
 
+
+
+
+
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p8%20currrent%20appoin%20table.png)
 
 ### View appoinment Schedule (All Doctors data)
-This screenshot displays the backend view of the Healthcare DApp, showing the complete appointment schedule for all doctors. Each row represents a doctor, and each column indicates hourly time slots from 1:00 PM to 7:00 PM. The system dynamically updates the status as "Booked" or "Available" based on real-time blockchain data, helping admins or users easily track appointment availability across all registered doctors
+This screenshot displays the backend view of the Healthcare DApp, showing the complete appointment schedule for all doctors. Each row represents a doctor, and each column indicates hourly time slots from 1:00 PM to 7:00 PM. The system dynamically updates the status as "Booked" or "Available" based on real-time blockchain data, helping admins or users easily track appointment availability across all registered doctors.
+
+
+
 
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p9%20View%20all%20appointment%20table1.png)
+
+
+
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p10%20view%20all%20appointment%20table%202.png)
 
 ### Book Doctors Appointment(Patient Only)
 This screenshot shows the "Book Doctor Appointment" section for patients in the Healthcare DApp. The user attempts to book an appointment with Dr. Jiya Patel for the 2:00 PM – 3:00 PM slot, but a pop-up alert indicates that the selected time slot is already booked. This ensures real-time slot validation, preventing double booking through blockchain logic.
 
+
+
+
 ![Image Alt](https://github.com/user-attachments/assets/2ef41838-1a9b-44e3-92ae-7c43b9029aac)
+
 
 ### Covid Trend Data (Current Data)
 This screenshot displays the "Covid Trend Data" section of the Healthcare DApp. It shows a statistical summary of patient data by district, including total patients, age group distribution, and median age. For the district “Nikol,” one patient is recorded, with 100% falling under the elder category, indicating valuable demographic insight for health monitoring.
 
+
+
+
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p14%20covid%20trend%20data%20(view%20treds)%20patient.png)
+
+
 
 ### Registered Patients (Patients already registered)
 This screenshot shows the "Registered Patients" section of the Healthcare DApp, powered by a blockchain-based backend. It displays a structured table of patient details such as name, age, gender, district, symptoms, and blood group. All data is securely stored and retrieved using smart contracts, ensuring transparency and tamper-proof patient management.
 
+
+
+
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p15%20register%20patient%20table%20.png)
+
+
 
 ### MongoDb and API
 These screenshots showcase the backend database setup and API integration of the Healthcare DApp using MongoDB and Express.js. The first image shows MongoDB Compass connected to the healthcare database, with two collections: doctors and patients. The second and third images display JSON data fetched from API endpoints (/api/patients and /api/doctors) hosted on localhost:4000, returning structured information like patient demographics and doctor details. This setup ensures that user data is stored securely in MongoDB and served efficiently to the frontend via RESTful APIs.
 
+
+
+
+
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/mongoDB%20data1.png)
 
+
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/API%20doc%20data.png)
+
 
 ![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/API%20patient%20data.png)
 
