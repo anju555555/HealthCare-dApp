@@ -95,31 +95,59 @@ Following commands are tested on window.
 ## Screenshots
 
 ### Registration Page (Admin & Doctor & patients)
-The screenshots showcase the Home and Registration pages of the Healthcare DApp. The home page confirms successful MetaMask wallet connection and displays the user's token balance. Users can register as Admin, Doctor, or Patient by selecting their role and filling out the respective form. Each registration triggers a MetaMask transaction for secure blockchain-based storage. Admins enter their name, doctors provide additional details like specialization and license number, and patients submit information such as age, symptoms, and blood group.
-![Registration Page]
+The homepage of the Healthcare DApp showcases a blockchain-powered Patient Management System designed for secure and decentralized healthcare records management. At the top, a navigation bar provides quick access to key sections such as Home, Registration, Appointments, and Reports. A prominent success message confirms that the user's wallet has been connected successfully, indicating that MetaMask or another Ethereum-compatible wallet is actively linked to the application. Just below, the token balance is displayed, showing that the connected user holds 100 HCT (Healthcare Tokens), which are likely used for transactions within the platform. The registration section allows users to register based on their role—Admin, Doctor, or Patient—by selecting a user type and filling in the relevant details. The interface is clean, responsive, and user-friendly, making it easy to navigate and interact with the blockchain backend.
 
-### Registration Page (Patient)
-Here patients can register by providing their details. Every time you register a new patient, a new transaction is created in the blockchain.
-![Registration Page](Screenshot/patient_registration.png)
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p1%20home.png)
 
-### Admin Dashboard
-Here you will be able to update patient information.
-![Admin Dashboard](Screenshot/patient_update.png)
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p3%20Doc%20regi.png)
 
-### Patient Dashboard
-Here you will be able to book an appointment with a doctor. You can also view if the doctor is booked at a particular time.
-![Patient Dashboard](Screenshot/patient_dashboard.png)
-Every time a patient books an appointment, the selected admin gets one ether as a fee.
-![Doctor Booking](Screenshot/doctor_book.png)
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p4%20patient%20regi.png)
 
-### Doctor Schedule
-Here the doctor can view their schedule and appointments with information like how many patients registered and their age.
-![Doctor Schedule](Screenshot/schedule_update.png)
+
+
+### Update Patient Data (Admin only)
+This screenshot shows the "Update Patient Data" section for admins in the Healthcare DApp. The admin selects a patient, updates their vaccine and admission status, and submits the changes. MetaMask then prompts for transaction confirmation, ensuring the update is securely recorded on the blockchain.
+
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p6%20patient%20form%20(admin)%20.png)
+
+### View appoinment Schedule (For Current Doctor)
+This screenshot displays the "View Appointment Schedules" section of the Healthcare DApp. It shows the connected user's wallet address, token balance, and available appointment slots. For Dr. Jiya Patel, multiple time slots are already marked as "Booked," helping users view current availability in real-time.
+
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p8%20currrent%20appoin%20table.png)
+
+### View appoinment Schedule (All Doctors data)
+This screenshot displays the backend view of the Healthcare DApp, showing the complete appointment schedule for all doctors. Each row represents a doctor, and each column indicates hourly time slots from 1:00 PM to 7:00 PM. The system dynamically updates the status as "Booked" or "Available" based on real-time blockchain data, helping admins or users easily track appointment availability across all registered doctors
+
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p9%20View%20all%20appointment%20table1.png)
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p10%20view%20all%20appointment%20table%202.png)
+
+### Book Doctors Appointment(Patient Only)
+This screenshot shows the "Book Doctor Appointment" section for patients in the Healthcare DApp. The user attempts to book an appointment with Dr. Jiya Patel for the 2:00 PM – 3:00 PM slot, but a pop-up alert indicates that the selected time slot is already booked. This ensures real-time slot validation, preventing double booking through blockchain logic.
+
+![Image Alt](https://github.com/user-attachments/assets/2ef41838-1a9b-44e3-92ae-7c43b9029aac)
+
+### Covid Trend Data (Current Data)
+This screenshot displays the "Covid Trend Data" section of the Healthcare DApp. It shows a statistical summary of patient data by district, including total patients, age group distribution, and median age. For the district “Nikol,” one patient is recorded, with 100% falling under the elder category, indicating valuable demographic insight for health monitoring.
+
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p14%20covid%20trend%20data%20(view%20treds)%20patient.png)
+
+### Registered Patients (Patients already registered)
+This screenshot shows the "Registered Patients" section of the Healthcare DApp, powered by a blockchain-based backend. It displays a structured table of patient details such as name, age, gender, district, symptoms, and blood group. All data is securely stored and retrieved using smart contracts, ensuring transparency and tamper-proof patient management.
+
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/p15%20register%20patient%20table%20.png)
+
+### MongoDb and API
+These screenshots showcase the backend database setup and API integration of the Healthcare DApp using MongoDB and Express.js. The first image shows MongoDB Compass connected to the healthcare database, with two collections: doctors and patients. The second and third images display JSON data fetched from API endpoints (/api/patients and /api/doctors) hosted on localhost:4000, returning structured information like patient demographics and doctor details. This setup ensures that user data is stored securely in MongoDB and served efficiently to the frontend via RESTful APIs.
+
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/mongoDB%20data1.png)
+
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/API%20doc%20data.png)
+
+![Image Alt](https://github.com/anju555555/HealthCare-dApp/blob/00aad818f096178b4a1c5bd79ebbf55b5c73239a/Screenshots/API%20patient%20data.png)
+
+
+-----
+
 
 ---
 
-## How to Contribute
-1. Fork the repository.
-2. Push your changes to a new branch.
-3. Create a pull request.
-4. Wait for the pull request to be reviewed.
